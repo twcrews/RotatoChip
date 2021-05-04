@@ -4,6 +4,29 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <AssemblyName>Utility.RotatoChip</AssemblyName>
+    <RootNamespace>Crews.Utility.RotatoChip</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="res\chip.png" />
+    <None Remove="res\monitor.png" />
+    <None Remove="res\monitor180.png" />
+    <None Remove="res\monitor270.png" />
+    <None Remove="res\monitor90.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapplo.Windows.User32" Version="0.11.29" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="res\chip.png" />
+    <Resource Include="res\monitor.png" />
+    <Resource Include="res\monitor180.png" />
+    <Resource Include="res\monitor270.png" />
+    <Resource Include="res\monitor90.png" />
+  </ItemGroup>
 
 </Project>
