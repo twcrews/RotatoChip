@@ -1,139 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Crews.Utility.RotatoChip
 {
-    /// <summary>
-    /// https://www.codeguru.com/csharp/.net/net_general/tipstricks/creating-a-screen-rotator-in-.net.html
-    /// </summary>
     internal static class DisplayAPI
     {
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern DISP_CHANGE ChangeDisplaySettingsEx
-           (string lpszDeviceName, ref DEVMODE lpDevMode, IntPtr hwnd,
-           DisplaySettingsFlags dwflags, IntPtr lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern bool EnumDisplayDevices(string lpDevice,
-           uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice,
-           uint dwFlags);
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern int EnumDisplaySettings
-           (string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
-
-        public const int DMDO_DEFAULT = 0;
-        public const int DMDO_90 = 1;
-        public const int DMDO_180 = 2;
-        public const int DMDO_270 = 3;
-
-        public const int ENUM_CURRENT_SETTINGS = -1;
-
-
-
-        [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-        internal struct DEVMODE
+        internal class NativeMethods
         {
-            public const int CCHDEVICENAME = 32;
-            public const int CCHFORMNAME = 32;
+#pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
+            [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+            internal static extern DisplayChangeStatus ChangeDisplaySettingsEx(
+                string lpszDeviceName, ref DeviceSettings lpDevMode, IntPtr hwnd,
+                DisplaySettingsFlags dwflags, IntPtr lParam);
 
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst =
-               CCHDEVICENAME)]
-            [FieldOffset(0)]
-            public string dmDeviceName;
-            [FieldOffset(32)]
-            public short dmSpecVersion;
-            [FieldOffset(34)]
-            public short dmDriverVersion;
-            [FieldOffset(36)]
-            public short dmSize;
-            [FieldOffset(38)]
-            public short dmDriverExtra;
-            [FieldOffset(40)]
-            public DM dmFields;
+            [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+            internal static extern bool EnumDisplayDevices(
+                string lpDevice, uint iDevNum, ref DisplayDevice lpDisplayDevice,
+                uint dwFlags);
 
-            [FieldOffset(44)]
-            readonly short dmOrientation;
-            [FieldOffset(46)]
-            readonly short dmPaperSize;
-            [FieldOffset(48)]
-            readonly short dmPaperLength;
-            [FieldOffset(50)]
-            readonly short dmPaperWidth;
-            [FieldOffset(52)]
-            readonly short dmScale;
-            [FieldOffset(54)]
-            readonly short dmCopies;
-            [FieldOffset(56)]
-            readonly short dmDefaultSource;
-            [FieldOffset(58)]
-            readonly short dmPrintQuality;
+            [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+            internal static extern int EnumDisplaySettings(
+                string lpszDeviceName, int iModeNum, ref DeviceSettings lpDevMode);
+#pragma warning restore CA2101
 
-            [FieldOffset(44)]
-            public POINTL dmPosition;
-            [FieldOffset(52)]
-            public int dmDisplayOrientation;
-            [FieldOffset(56)]
-            public int dmDisplayFixedOutput;
+            internal const int DMDO_DEFAULT = 0;
+            internal const int DMDO_90 = 1;
+            internal const int DMDO_180 = 2;
+            internal const int DMDO_270 = 3;
 
-            [FieldOffset(60)]
-            public short dmColor;
-            [FieldOffset(62)]
-            public short dmDuplex;
-            [FieldOffset(64)]
-            public short dmYResolution;
-            [FieldOffset(66)]
-            public short dmTTOption;
-            [FieldOffset(68)]
-            public short dmCollate;
-            [FieldOffset(72)]
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
-            public string dmFormName;
-            [FieldOffset(102)]
-            public short dmLogPixels;
-            [FieldOffset(104)]
-            public int dmBitsPerPel;
-            [FieldOffset(108)]
-            public int dmPelsWidth;
-            [FieldOffset(112)]
-            public int dmPelsHeight;
-            [FieldOffset(116)]
-            public int dmDisplayFlags;
-            [FieldOffset(116)]
-            public int dmNup;
-            [FieldOffset(120)]
-            public int dmDisplayFrequency;
+            internal const int ENUM_CURRENT_SETTINGS = -1;
+
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        internal struct DISPLAY_DEVICE
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int cb;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string DeviceName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string DeviceString;
-            [MarshalAs(UnmanagedType.U4)]
-            public DisplayDeviceStateFlags StateFlags;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string DeviceID;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string DeviceKey;
-        }
-
+        // See: https://msdn.microsoft.com/de-de/library/windows/desktop/dd162807(v=vs.85).aspx
         [StructLayout(LayoutKind.Sequential)]
         internal struct POINTL
         {
-            readonly long x;
-            readonly long y;
+            internal readonly long X;
+            internal readonly long Y;
         }
 
-        internal enum DISP_CHANGE : int
+        internal enum DisplayChangeStatus : int
         {
             Successful = 0,
             Restart = 1,
@@ -145,6 +52,7 @@ namespace Crews.Utility.RotatoChip
             BadDualView = -6
         }
 
+        // http://www.pinvoke.net/default.aspx/Enums/DisplayDeviceStateFlags.html
         [Flags()]
         internal enum DisplayDeviceStateFlags : int
         {
@@ -159,6 +67,7 @@ namespace Crews.Utility.RotatoChip
             Disconnect = 0x2000000
         }
 
+        // http://www.pinvoke.net/default.aspx/user32/ChangeDisplaySettingsFlags.html
         [Flags()]
         internal enum DisplaySettingsFlags : int
         {

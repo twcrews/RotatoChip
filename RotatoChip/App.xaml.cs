@@ -15,17 +15,17 @@ namespace Crews.Utility.RotatoChip
     public partial class App : Application
     {
         private SettingsWindow Window { get; set; }
+        private List<Display> Displays { get; set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Display.Rotate(1, Display.Orientations.DEGREES_CW_0);
+            Displays = Display.GetAllDisplays();
 
             Window = new();
             Window.Closed += HandleWindowClose;
-            Window.Monitors = new string[] { "Test1", "Test2" };
-            Window.SelectedMonitor = Window.Monitors.First();
-            Window.CursorAware = true;
+            Window.Displays = Displays.Select(display => display.Name).ToArray();
+            Window.SelectedDisplay = Window.Displays.First();
             Window.Show();
         }
 

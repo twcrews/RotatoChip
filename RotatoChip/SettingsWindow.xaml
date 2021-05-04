@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Crews.Utility.RotatoChip"
         mc:Ignorable="d"
         Title="Rotato Chip Settings" 
-        Height="550" 
+        Height="500" 
         Width="450"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -34,6 +34,7 @@
                 Style="{StaticResource MaterialDesignFlatButton}"
                 Content="CANCEL"
                 Margin="10,0,0,0"
+                Click="CancelButton_Click"
             />
         </StackPanel>
         <StackPanel>
@@ -52,30 +53,15 @@
                     VerticalAlignment="Center"
                 />
             </StackPanel>
-            <RadioButton
-                x:Name="AllMonitorsRadio"
-                x:FieldModifier="private" 
-                GroupName="PerMonitorGroup"
-                Checked="PerMonitorToggleChanged"
-                Content="Rotate display containing mouse pointer"
-                Margin="0,20,0,0"
-            />
-            <RadioButton
-                x:Name="PerMonitorRadio"
-                x:FieldModifier="private" 
-                GroupName="PerMonitorGroup"
-                Checked="PerMonitorToggleChanged"
-                Content="Define shortcut for each display"
-                Margin="0,5,0,0"
-            />
             <ComboBox
-                x:Name="MonitorComboBox"
+                x:Name="DisplayComboBox"
                 x:FieldModifier="private"
                 materialDesign:HintAssist.Hint="Monitor"
                 Style="{StaticResource MaterialDesignOutlinedComboBox}"
                 Margin="0,15,0,0"
                 Width="300"
                 HorizontalAlignment="Left"
+                DisplayMemberPath="Display.Name"
             />
             <TextBlock
                 Margin="0,30,0,0"

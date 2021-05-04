@@ -20,32 +20,20 @@ namespace Crews.Utility.RotatoChip
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public event RoutedEventHandler PerMonitorToggled;
-
-        public bool CursorAware
+        public string[] Displays
         {
-            get => Convert.ToBoolean(PerMonitorRadio.IsChecked);
-            set => PerMonitorRadio.IsChecked = value;
+            get => (string[])DisplayComboBox.ItemsSource;
+            set => DisplayComboBox.ItemsSource = value;
         }
 
-        public string[] Monitors
+        public string SelectedDisplay
         {
-            get => (string[])MonitorComboBox.ItemsSource;
-            set => MonitorComboBox.ItemsSource = value;
-        }
-
-        public string SelectedMonitor
-        {
-            get => MonitorComboBox.SelectedItem.ToString();
-            set => MonitorComboBox.SelectedItem = value;
+            get => DisplayComboBox.SelectedItem.ToString();
+            set => DisplayComboBox.SelectedItem = value;
         }
 
         public SettingsWindow() => InitializeComponent();
 
-        private void PerMonitorToggleChanged(object sender, RoutedEventArgs e)
-        {
-            MonitorComboBox.IsEnabled = Convert.ToBoolean(PerMonitorRadio.IsChecked);
-            PerMonitorToggled?.Invoke(this, e);
-        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e) => Close();
     }
 }
