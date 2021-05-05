@@ -6,21 +6,30 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace Crews.Utility.RotatoChip
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private SettingsWindow Window { get; set; }
         private List<Display> Displays { get; set; }
+        private KeyboardHook KeyboardHook { get; set; }
+        private Keyboard Keyboard { get; set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             Displays = Display.GetAllDisplays();
+            KeyboardHook = new KeyboardHook();
+            Keyboard = new Keyboard();
+            KeyboardHook.KeyUp += Keyboard.HandleKeyUp;
+            KeyboardHook.KeyDown += Keyboard.HandleKeyDown;
+            KeyboardHook.KeyDown += HandleKeyDown;
+            KeyboardHook.KeyUp += HandleKeyDown;
 
             Window = new();
             Window.Closed += HandleWindowClose;
@@ -30,5 +39,12 @@ namespace Crews.Utility.RotatoChip
         }
 
         private void HandleWindowClose(object sender, EventArgs e) => OnExit(null);
+        private void HandleKeyDown(object sender, HookEventArgs e)
+        {
+            Debug.WriteLine(string.Empty);
+            foreach(Keys key in Keyboard.PressedKeys)
+            {
+            }
+        }
     }
 }
