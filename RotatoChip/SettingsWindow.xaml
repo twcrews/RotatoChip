@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Crews.Utility.RotatoChip"
         mc:Ignorable="d"
         Title="Rotato Chip Settings" 
-        Height="500" 
-        Width="450"
+        Width="600"
+        Height="600"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -15,28 +15,41 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        FontFamily="{DynamicResource MaterialDesignFont}" 
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="Window_PreviewKeyDown"
     >
     <DockPanel Margin="20,10">
-        <StackPanel 
-            Orientation="Horizontal" 
-            FlowDirection="RightToLeft"
-            DockPanel.Dock="Bottom"
-        >
+        <DockPanel DockPanel.Dock="Bottom">
+            <StackPanel 
+                DockPanel.Dock="Right"
+                Orientation="Horizontal" 
+                FlowDirection="RightToLeft"
+                Margin="0,30,0,0"
+            >
+                <Button
+                    x:Name="SaveButton"
+                    x:FieldModifier="private"
+                    Content="SAVE"
+                    Click="SaveButton_Click"
+                    IsEnabled="False"
+                />
+                <Button
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Content="CANCEL"
+                    Margin="10,0,0,0"
+                    Click="CancelButton_Click"
+                />
+            </StackPanel>
             <Button
-                x:Name="SaveButton"
-                x:FieldModifier="private"
-                Content="SAVE"
-            />
-            <Button
-                x:Name="CancelButton"
-                x:FieldModifier="private"
                 Style="{StaticResource MaterialDesignFlatButton}"
-                Content="CANCEL"
-                Margin="10,0,0,0"
-                Click="CancelButton_Click"
+                Content="EXIT ROTATO CHIP"
+                Click="ExitButton_Click" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Bottom"
             />
-        </StackPanel>
+        </DockPanel>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Image 
@@ -56,12 +69,12 @@
             <ComboBox
                 x:Name="DisplayComboBox"
                 x:FieldModifier="private"
-                materialDesign:HintAssist.Hint="Monitor"
+                materialDesign:HintAssist.Hint="Display"
                 Style="{StaticResource MaterialDesignOutlinedComboBox}"
                 Margin="0,15,0,0"
                 Width="300"
                 HorizontalAlignment="Left"
-                DisplayMemberPath="Display.Name"
+                SelectionChanged="DisplayComboBox_SelectionChanged"
             />
             <TextBlock
                 Margin="0,30,0,0"
@@ -74,12 +87,10 @@
                     Orientation="Horizontal"
                     DockPanel.Dock="Right"
                 >
-                    <TextBlock
-                        x:Name="LandscapeShortcutTextBlock"
+                    <StackPanel
+                        x:Name="LandscapeShortcutStackPanel"
                         x:FieldModifier="private"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Text="Not set"
+                        Orientation="Horizontal"
                     />
                     <Button
                         x:Name="LandscapeShortcutSetButton"
@@ -88,6 +99,7 @@
                         Margin="20,0,0,0"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="SET"
+                        Click="SetShortcutButton_Click"
                     />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -110,12 +122,10 @@
                     Orientation="Horizontal"
                     DockPanel.Dock="Right"
                 >
-                    <TextBlock
-                        x:Name="PortraitShortcutTextBlock"
+                    <StackPanel
+                        x:Name="PortraitShortcutStackPanel"
                         x:FieldModifier="private"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Text="Not set"
+                        Orientation="Horizontal"
                     />
                     <Button
                         x:Name="PortraitShortcutSetButton"
@@ -124,6 +134,7 @@
                         Margin="20,0,0,0"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="SET"
+                        Click="SetShortcutButton_Click"
                     />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -146,12 +157,10 @@
                     Orientation="Horizontal"
                     DockPanel.Dock="Right"
                 >
-                    <TextBlock
-                        x:Name="UpsideDownShortcutTextBlock"
+                    <StackPanel
+                        x:Name="UpsideDownShortcutStackPanel"
                         x:FieldModifier="private"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Text="Not set"
+                        Orientation="Horizontal"
                     />
                     <Button
                         x:Name="UpsideDownShortcutSetButton"
@@ -160,6 +169,7 @@
                         Margin="20,0,0,0"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="SET"
+                        Click="SetShortcutButton_Click"
                     />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -182,12 +192,10 @@
                     Orientation="Horizontal"
                     DockPanel.Dock="Right"
                 >
-                    <TextBlock
-                        x:Name="PortraitInvertedShortcutTextBlock"
+                    <StackPanel
+                        x:Name="PortraitInvertedShortcutStackPanel"
                         x:FieldModifier="private"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Text="Not set"
+                        Orientation="Horizontal"
                     />
                     <Button
                         x:Name="PortraitInvertedShortcutSetButton"
@@ -196,6 +204,7 @@
                         Margin="20,0,0,0"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="SET"
+                        Click="SetShortcutButton_Click"
                     />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -213,6 +222,36 @@
                     />
                 </StackPanel>
             </DockPanel>
+            <TextBlock
+                Margin="0,30,0,0"
+                Text="Startup"
+                FontSize="24"
+                FontWeight="Medium"
+            />
+            <StackPanel 
+                Orientation="Horizontal"
+                Margin="0,10,0,0"
+            >
+                <ToggleButton
+                    x:Name="StartWithWindowsToggle"
+                    x:FieldModifier="private"
+                    Click="StartWithWindowsToggle_Click"
+                />
+                <Label 
+                    Content="Start with Windows" 
+                    Margin="5,0,0,0"
+                />
+                <ToggleButton
+                    x:Name="ShowSettingsOnStartToggle"
+                    x:FieldModifier="private"
+                    Margin="60,0,0,0"
+                    Click="ShowSettingsOnStartToggle_Click"
+                />
+                <Label 
+                    Content="Show settings on startup" 
+                    Margin="5,0,0,0"
+                />
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </Window>

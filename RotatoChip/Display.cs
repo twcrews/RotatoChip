@@ -8,7 +8,8 @@ namespace Crews.Utility.RotatoChip
 {
     public class Display
     {
-        public string Name { get; private set; }
+        public string Name => $"Display {DisplayIndex + 1}";
+        public string DeviceName => Device.DeviceName;
 
         public void Rotate(Orientation orientation)
         {
@@ -32,7 +33,7 @@ namespace Crews.Utility.RotatoChip
 
             return new()
             {
-                Name = $"Display {displayIndex + 1}",
+                DisplayIndex = displayIndex,
                 Device = device, 
                 Settings = GetSettings(device) 
             };
@@ -54,6 +55,7 @@ namespace Crews.Utility.RotatoChip
 
         private Display() { }
 
+        private uint DisplayIndex;
         private DisplayDevice Device;
         private DeviceSettings Settings;
 

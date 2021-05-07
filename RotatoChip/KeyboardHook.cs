@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Crews.Utility.RotatoChip
 {
@@ -118,23 +118,11 @@ namespace Crews.Utility.RotatoChip
 
     public class HookEventArgs : EventArgs
     {
-        // using Windows.Forms.Keys instead of Input.Key since the Forms.Keys maps
-        // to the Win32 KBDLLHOOKSTRUCT virtual key member, where Input.Key does not
-        public Keys Key;
-        public bool Alt;
-        public bool Control;
-        public bool Shift;
+        public Key Key;
 
-        public HookEventArgs(UInt32 keyCode)
+        public HookEventArgs(uint keyCode)
         {
-            // detect what modifier keys are pressed, using 
-            // Windows.Forms.Control.ModifierKeys instead of Keyboard.Modifiers
-            // since Keyboard.Modifiers does not correctly get the state of the 
-            // modifier keys when the application does not have focus
-            Key = (Keys)keyCode;
-            Alt = (System.Windows.Forms.Control.ModifierKeys & Keys.Alt) != 0;
-            Control = (System.Windows.Forms.Control.ModifierKeys & Keys.Control) != 0;
-            Shift = (System.Windows.Forms.Control.ModifierKeys & Keys.Shift) != 0;
+            Key = Keyboard.GetKeyFromLegacy((LegacyKeys)keyCode);
         }
     }
 }
