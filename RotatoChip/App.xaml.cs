@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -41,6 +42,13 @@ namespace Crews.Utility.RotatoChip
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(
+                Process.GetCurrentProcess().MainModule.ModuleName)).Length > 1)
+            {
+                MessageBox.Show("Rotato Chip is already running!", "Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                Shutdown();
+            }
             Displays = Display.GetAllDisplays();
             CreateKeyboardMap();
             CreateKeyboardHook();
@@ -101,7 +109,7 @@ namespace Crews.Utility.RotatoChip
         private void CreateTrayIcon()
         {
             TrayIcon = new();
-            TrayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+            TrayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName);
             TrayIcon.TrayLeftMouseDown += HandleTrayIconClick;
             TrayIcon.TrayRightMouseDown += HandleTrayIconClick;
         }

@@ -60,7 +60,7 @@ namespace Crews.Utility.RotatoChip
 
         private static Configuration NewConfiguration()
         {
-            Configuration configuration = new() { Shortcuts = new() };
+            Configuration configuration = new() { Shortcuts = new(), ShowSettingsOnStart = true };
             Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationPath));
             File.WriteAllText(ConfigurationPath, JsonConvert.SerializeObject(configuration));
             return configuration;
