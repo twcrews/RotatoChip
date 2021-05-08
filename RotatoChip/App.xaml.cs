@@ -141,6 +141,7 @@ namespace Crews.Utility.RotatoChip
             SettingsWindow.SaveClicked += HandleSave;
             SettingsWindow.StartWithWindowsChanged += HandleStartWithWindowsChanged;
             SettingsWindow.ShowSettingsOnStartChanged += HandleShowSettingsOnStartChanged;
+            SettingsWindow.Closed += HandleSettingsWindowClosed;
             SettingsWindow.Exit += HandleExit;
         }
 
@@ -182,6 +183,8 @@ namespace Crews.Utility.RotatoChip
             Configuration.ShowSettingsOnStart = SettingsWindow.ShowSettingsOnStart;
             SettingsWindow.SaveEnabled = true;
         }
+
+        private void HandleSettingsWindowClosed(object sender, EventArgs e) => StopListeningForShortcut(null, null);
 
         private void HandleExit(object sender, EventArgs e) => Shutdown();
 
