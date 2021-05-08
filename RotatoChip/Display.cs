@@ -84,8 +84,8 @@ namespace Crews.Utility.RotatoChip
     public enum Orientation
     {
         Landscape = 0,
-        Portrait = 3,
+        Portrait = 1,
         UpsideDown = 2,
-        PortraitInverted = 1
+        PortraitInverted = 3
     }
 }
